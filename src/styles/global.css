@@ -25,6 +25,7 @@
 
     /* =============BORDER===================*/
     --color-border: var(--semantic-border);
+    
     --color-border-strong: var(--semantic-border-strong);
 
     /* =================FOCUS================ */
