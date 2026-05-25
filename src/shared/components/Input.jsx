@@ -2,20 +2,57 @@ export default function Input({
     label, 
     htmlFor,
     type= "text",
+    variant= "primary",
+    size= "lg",
     ...props 
 }){
+
+    const variants = {
+        // Obligatorio que estos valores deben de ser con variables
+        primary:`
+                border-brand
+                bg-background
+        `, 
+        secundary:`
+                border-red-950
+                bg-gray-300
+        `, 
+        tertiary:`
+                border-green-950
+        `
+    }
+    const sizes = {
+        sm:`
+              h-8
+        `, 
+        md:`
+                h-10
+        `, 
+        lg:`
+                h-12
+        `
+    }
 
     return(
             <div className="w-80">
                         {/*label*/}
                     <label 
+                        // htmlFor con kebab-case
                         htmlFor={htmlFor}
-                        className="
+                        className={`
                             block
                             text-caption
-                            mb-1
                             text-secondary
-                        "
+                            ${
+                                size === "sm"
+                                    ? "-mb-2"
+                                    : size === "md"
+                                        ? "mb-0"
+                                        : "mb-1"
+                            }
+                        
+                        
+                        `}
                         >
                         {label}
                     </label>
@@ -46,20 +83,23 @@ export default function Input({
 
                     {/* input visual*/}
                     <input 
+                        id={htmlFor}
                         type={type}
-                        className="
+                        className={`
                         relative
                         w-full
-                        h-10
                         rounded-md
-                        border border-black
+                        border
                         px-4
                         text-body
+
                         focus:outline-none
                         focus:ring-2
                         focus:ring-ring
                         focus:ring-brand
-                    "   
+                        ${variants[variant]}
+                        ${sizes[size]}
+                   `}
                      {...props} 
                     />
                     </div>
