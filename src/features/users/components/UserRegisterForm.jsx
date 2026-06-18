@@ -1,149 +1,272 @@
-// userRegisterForm componente para registrar un usuario
-import { useState, useEffect } from  "react"
-import { Input, Select, Checkbox, Button } from "@/shared"
-import { getDocumentTypes } from "@/services/selectServices";
+// UserRegisterForm componente para registrar un usuario
+
+import { useState, useEffect } from "react";
+import { Input, Select, Checkbox, Button, IconButton } from "@/shared";
+import { Save } from "lucide-react";
+import { getDocumentTypes } from "@/services/selectService";
+import { useNavigate} from "react-router-dom";
+import {userSchema} from "../schemas/userSchema";
+
+
 
 
 export default function UserRegisterForm (){
-// Estado del formulario
-    const [FormData, setFormData] = useState({
-        userName:"",
-        userEmail:"",
-        userPhone:"",
-        userDocumentType:"",
-        userDocumentNumber:"",
-        userPassword:"",
-        // userImage:[],
+        // Estado
+        // const [isSubmitting, setIsSubmitting] = useState(false);
+        // Navegación
+        const navigate = useNavigate();
 
-        isStaff: false,
-        isActive: true,
-        isSuperUser: false,
+        // Estado para errores 
+        const [errors, setErrors] = useState({});
+        // Estado del formulario 
+        const [formData, setFormData] =  useState({
+            userName: "",
+            userEmail: "",
+            userPhone: "",
+            userDocumentType: "",
+            userDocumentNumber: "",
+            userPassword: "",
+            // userImage: [],
 
-        
-        
-    });
-    const[documentTypes, setDocumentTypes] = useState ([])
-       // El uso del estado  useEffect
-       useEffect(() =>{
-           getDocumentTypes().then(setDocumentTypes);
-       },[])
+            //Flags booleanos
+            isStaff: false,
+            isActive: true,
+            isSuperUser: false,
+        });
 
+        //Estado para los tipos de documento
+        const [documentTypes, setDocumentTypes] = useState([]);
+    
+        // Uso del estado useEffect 
+        useEffect(() => {
+            getDocumentTypes().then(setDocumentTypes);
+        },[])
 
-    const handleChange = (e) => {
-        const {name, value, type, checked} = e.target;
+        //========================================
+        //          Handle Generico
+        //========================================
+        /**
+         * Función que se ejecuta cada vez que cambia el valor de un input del formulario
+         */
+        const handleChange = (e) => {
+            // Se obtiene el nombre del campo y su valor
+            const { name, value, type, checked } = e.target;
 
-        setFormData ((prev) => ({
+        setFormData((prev) => ({
+            // Se copian todos los valores anteriores del estado
             ...prev,
 
-            [name]: type === "checkbox" ? checked : value
+            // Se actualiza unicamente lo que cambio
+            [name]: type === "checkbox" ? checked : value,
         }));
     };
 
+ 
 
-    const handleSubmit = async (e) => {
-        // Evita que el formulario recargue la pagina
+    //===================== HANDLE SUBMIT =============================
+    const handleSubmit = async(e) => {
+        //Evita que el formulario recargue la pagina
         e.preventDefault();
 
-        const result = userSchema.safeParse(FormData);
+        //Validamos los datos del formulario contra el esquema Zod
+        //saFeParse NO lanza exceptcion, retorna un objeto controlado
+        const result = userSchema.safeParse(formData);
 
-        if (!result.succes){
+        //Verificar en consola si el esquema está funcionado correctamente 
+        // console.log(result);
+
+        //Si la validacion falla
+        if(!result.success){
+            //Objeto donde almacenaremos los errores por campo
             const fieldErrors = {};
 
+            // Recorremos cada error generado por Zod
             result.error.issues.forEach((issue) => {
-                fieldErrors[issues.path[0]] = issue.message;
-            })
+                //issue.path[0] corresponde al nombre del campo
+                // issue.message contiene el mensaje de error definido en el schema
+                fieldErrors[issue.path[0]] = issue.message;
+            });
 
+            // Actualizamos el estado de errores para mostrarlos en el UI 
             setErrors(fieldErrors);
+
+            // Cortamos la ejecución: NO se envia nada al backend
+
             return;
         }
+        // Si la validacion pasa, limpiamos errores previos
+        setErrors({});
 
+        //Activamos eestado de envio (util para desahibilitar el boton)
+        // setIsSubmitting(true);
 
-    return(
-        <div>
-            <Input 
-             label="nombre"
-             type="text"
-             placeholder="Escribe tu nombre"
-             htmlFor="user-name"
+        try {
+            //llamamos al servivio frontend que soncume la API 
+            //result.data contiene los datos ya validamos por Zod
+            // const responde = await createUser(result.data);
+
+            //Log informativo para desarrolllo
+            // console("Usuario Creado:", responde);
+
+            //Feedback basico al usuario 
+            alert("Usuario creado correctamente");
+
+            //Navegamos a la vista anterior
+            // navigate (-1) equivale a "volver atras"
+            navigate(-1);
+        } catch (error){
+            //Caoturamos errores de red o errores lanzados por el service
+            console.error("Error:" , error.message);
+
+            //Mstramos el mensaje de error al usuario 
+            alert(error.message);
+        } finally {
+            //Pase lo que pase, desactivamos el esrado de envio 
+            // setIsSubmitting(false);
+        }
+    };
+
+    //========================================
+    //          Handle NameChange
+    //========================================
+
+    // const handleNameChange = (e) => {
+    //     const value = e.target.value.trim();
+
+    //     if (value === "") {
+    //         console.log("El nombre no puede estar vacio");
+    //     }
+    // };
+
+return(
+        <div className="grid items-center justify-center">
+            <h1 className="mx-auto my-12 text-title font-heading font-bold ">
+                Registro de usuarios</h1>
+            {/* Formulario*/}
+            <form 
+              action=""
+              onSubmit={handleSubmit}
+            >
+            <Input
+                    label="Nombre"
+                    name="userName"
+                    type="text"
+                    value={formData.userName}
+                    placeholder="Escribe tu nombre"
+                    htmlFor="user-name"
+                    onChange={handleChange}
+                    error={errors.userName}
             />
-            <Input 
-             label="correo"
-             type="email"
-             placeholder="Escribe tu correo"
-             htmlFor="user-email"
+            <Input
+                    label="Correo"
+                    name="userEmail"
+                    type="email"
+                    value={formData.userEmail}
+                    placeholder="Escribe tu correo electronico"
+                    htmlFor="user-email"
+                    onChange={handleChange}
+                    error={errors.userEmail}
             />
-            <Input 
-             label="Telefono"
-             type="tel"
-             placeholder="Escribe tu número de teléfono"
-             htmlFor="user-phone"
+            <Input
+                    label="Telefono"
+                    name="userPhone"
+                    type="tel"
+                    value={formData.userPhone}
+                    placeholder="Escribe tu numero de telefono"
+                    htmlFor="user-phone"
+                    onChange={handleChange}
+                    error={errors.userPhone}
             />
+
             <Select
-              label="tipos de documentos"
-              name="userDocumentTypes"
-              htmlFor="userDocumentTypes"
-              options={documentTypes}
+                    label="Tipo de documento"
+                    name="userDocumentTypes"
+                     value={formData.userDocumentTypes}
+                    htmlFor="userDocumentTypes"
+                    onChange={handleChange}
+                    options={documentTypes}
+                    error={errors.userDocumentTypes}
             />
-            <Input 
-             label="Documento"
-             type="text"
-             placeholder="Escribe tu número de documento"
-             htmlFor="user-document-number"
+             <Input
+                    label="Documento"
+                    name="userDocumentNumber"
+                    type="text"
+                     value={formData.userDocumentNumber}
+                    placeholder="Escribe tu numero de documento"
+                    htmlFor="user-document-number"
+                    onChange={handleChange}
+                    error={errors.userDocumentNumber}
             />
-            <Input 
-             label="Contraseña"
-             type="password"
-             placeholder="Escribe tu contraseña"
-             htmlFor="user-password"
-            />
+             <Input
+                    label="Contraseña"
+                    name="userPassword"
+                    type="password"
+                    value={formData.userPassword}
+                    placeholder="Escribe tu contraseña"
+                    htmlFor="user-password"
+                    onChange={handleChange}
+                    error={errors.userPassword}
+                    />
 
-                {/**Checkbox */}
-            <Checkbox
-                id="isSuperUser"
-                name="isSuperUser"
-                label="Es super usuario"
-                checked={FormData.isSuperUser}
-                onChange={handleChange}
-            />
-            <Checkbox
-                id="isStaff"
-                name="isStaff"
-                label="Es staff"
-                checked={FormData.isStaff}
-                onChange={handleChange}
-            />
-            <Checkbox
-                id="isActive"
-                name="isActive"
-                label="Esta activo"
-                checked={FormData.isActive}
-                onChange={handleChange}
-            />
+                    {/*Checkbox*/}
+            <div className="grid gap-4 my-2">
+                <Checkbox
+                    id="isSuperUser"
+                    name="isSuperUser"
+                    label="Es super usuario"
+                    checked = {formData.isSuperUser}
+                    onChange={handleChange}
+                />
+                <Checkbox
+                    id="isStaff"
+                    name="isStaff"
+                    label="Es staff"
+                    checked = {formData.isStaff}
+                    onChange={handleChange}
+                />
+                <Checkbox
+                    id="isActive"
+                    name="isActive"
+                    label="Esta activo"
+                    checked = {formData.isActive}
+                    onChange={handleChange}
+                />
 
-
-
-
-                {/*Actions*/}
-
-            <div className="flex gap-6 items-center">
-                
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  type="submit"
-                  onClick={() => console.log("se oprimio el submit")}
-                >  
-                    cancelar
-                </Button>
-                <Button
-                  variant="primary"
-                  size="md"
-                  type="submit"
-                  onClick={() => console.log("se oprimio el submit")}
-                >  
-                     Guardar
-                </Button>
             </div>
+
+            
+            
+
+
+            {/* Actions */}
+                <div className="flex gap-6 items-center">
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        type="button"
+                        onClick={() => {console.log("Se oprimió el submit")}}
+                    >
+                     Cancelar
+                    </Button>
+                    <Button
+                        variant="primary"
+                        size="md"
+                        type="submit"
+                        onClick={() => {console.log("Se oprimió el submit")}}
+                    >
+                     Guardar
+
+                        <save className="size-4 ml-2"/>
+                    </Button>
+                  
+                </div>
+                
+            <IconButton/>
+          </form>
+          
         </div>
-    );
-}}
+    );   
+}
+
+
+
