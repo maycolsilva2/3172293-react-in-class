@@ -1,17 +1,17 @@
-// Imporamos  el pool de conexion a postgreSQL
-// Este pool es una instancia compartida configurada en la capa de infraestructura
+// Imporamos el pool de conexion a postgreSQL
 import { pool } from "../../config/db.js";
 
-// Exportamos el repositorio de usuarios
-// El repositorio encapsula todas las consultas SQL relacionadas con users.
 export const userRepository = {
 
-    // Metodo encargado de crear un nuevo usuario en la base de datos
-    // recibe un objeto con los datos ya validados y procesados por el service
-    async create(userData) {
+    // Método para consultar todos los usuarios de la base de datos
+    async findAll() {
+        const query = "SELECT * FROM public.users";
+        const result = await pool.query(query);
+        return result.rows; // Retorna todas las filas obtenidas
+    },
 
-        // Desustructuramos explícitamente las propiedades esperadas
-        // Esto hace el contrato de dstos claro y evita acceder a propiedades inexistentes
+    // Metodo encargado de crear un nuevo usuario en la base de datos
+    async create(userData) {
         const{
             userName,
             userEmail,
@@ -25,8 +25,6 @@ export const userRepository = {
             isSuperuser,
         } =  userData;
 
-            // Usar placeholder ($1,$2,...)previene inyecciones sql
-            // RETURNING permite obtener datos generado por la bases de datos (id)
         const query = `
             INSERT INTO  users (
                 user_name,
@@ -43,8 +41,6 @@ export const userRepository = {
             RETURNING id;
         `;
 
-        // Array de valores que se pasan al query
-        // El orden debe coincidir con los placeholders en la consulta SQL
         const values = [
             userName,
             userEmail,
@@ -58,14 +54,7 @@ export const userRepository = {
             isSuperuser,
         ];
 
-        // Ejecutamos la consulta usando el pool
-        // pool.query retorna u objeto en metadata y filas resultantes
         const result = await pool.query(query, values);
-
-        // devolvemos únicamente el primer registro retornado
-        // En este caso contiene el id del usuario recien creado
         return result.rows[0];
-
     },
-  }
-
+}

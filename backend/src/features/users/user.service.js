@@ -1,20 +1,35 @@
-// backend/src/features/users/user.service.js
 import { userRepository } from "./user.repository.js";
 import bcrypt from "bcrypt"; 
 
 export const userService = {
+
+    // Método que solicita al repositorio la lista y mapea los campos para el frontend
+    async getAllUsers() {
+        const users = await userRepository.findAll();
+        
+        // Mapeamos las propiedades de la BD a camelCase para que la tabla los lea correctamente
+        return users.map(user => ({
+            id: user.id,
+            userName: user.user_name,
+            userEmail: user.user_email,
+            userPhone: user.user_phone,
+            userDocumentTypes: user.user_document_types,
+            userDocumentNumber: user.user_document_number,
+            isStaff: user.is_staff,
+            isActive: user.is_active,
+            isSuperuser: user.is_superuser
+        }));
+    },
+
     async createUser(data) {
-        // 1. Extraemos la contraseña cruda sin importar qué formato envíe el frontend
         const rawPassword = data.userPassword || data.user_password || data.password || data.contrasena;
 
         if (!rawPassword) {
             throw new Error("La contraseña es requerida para el registro");
         }
 
-        // 2. Generamos el hash con bcrypt (10 rondas de salt)
         const hashedPassword = await bcrypt.hash(rawPassword, 10); 
 
-        // 3. Mapeamos las propiedades asegurando camelCase para userRepository.js
         const userData = { 
             userName: data.userName || data.user_name || data.name,
             userEmail: data.userEmail || data.user_email || data.email,
@@ -30,7 +45,6 @@ export const userService = {
 
         console.log("DATOS MAPEADOS Y HASHEADOS ENVIADOS AL REPO:", userData);
 
-        // 4. Delegamos al repositorio la inserción en la BD
         return await userRepository.create(userData);
     },
 };
