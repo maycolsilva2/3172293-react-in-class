@@ -1,100 +1,105 @@
 export default function Input({
-    label, 
+    label,
     error,
-    htmlFor,
-    type= "text",
-    variant= "primary",
-    size= "lg",
-    ...props 
+    htmlFor, //Es para accesibilidad, la persona que tiene una discapacidad va a escuchar el texto que esta ahi con tab
+    type = "text",
+    variant="primary",
+    size = "sm",
+    ...props
 }){
-
+    
     const variants = {
-        // Obligatorio que estos valores deben de ser con variables
-        primary:`
-                border-brand
-                bg-background
+            //Estos valores deben ser con variables 
+        primary: `
+            border-brand
+            bg-background
         `, 
-        secundary:`
-                border-red-950
-                bg-gray-300
+        secondary: `
+            border-red-300
+            bg-gray-300
         `, 
-        tertiary:`
-                border-green-950
+        tertiary: `
+            border-green-950
         `
     }
     const sizes = {
-        sm:`
-              h-8
+        
+        sm: `
+            h-8
+            
         `, 
-        md:`
-                h-10
+        md: `
+            h-10
         `, 
-        lg:`
-                h-12
+        lg: `
+            h-12
         `
     }
 
+
     return(
-            <div className="w-80">
-                        {/*label*/}
-                    <label 
-                        // htmlFor con kebab-case
-                        htmlFor={htmlFor}
-                        className={`
-                            block
-                            text-caption
-                            text-secondary
-                            ${
-                                size === "sm"
-                                    ? "-mb-2"
-                                    : size === "md"
-                                        ? "mb-0"
-                                        : "mb-1"
-                            }
-                            ${error ? "text-red-800" : "text-text-primary"}
-                        
-                        
-                        `}
-                        >
-                        {label}
-                    </label>
+        <div className="w-80">
+                {/*Label */}
+            <label 
+                // htmlFor con kebab-case
+                htmlFor={htmlFor}
+                className={`
+                    block
+                    text-caption
+                    mb-1
+                    text-secondary
+                    ${
+                        size === "sm"
+                            ? "-mb-2"
+                        : size === "md"
+                            ? "-mb-0"
+                            : "-mb-1"
+                    }
+                    ${error ? "text-red-800" : "text-text-primary"}
+                `}
+            >
+                
+                {label}
+            </label>
 
-                    {/* Contenedor del input*/}
-                    <div 
-                        className="
-                            relative
-                            h-12
-                            flex
-                            items-center 
-                        "
-                    >
-                    {/* Arrea interactiva invisible (48px)*/}
+                {/* Contenedor del input */}
+                <div 
 
-                    <div
-                     
-                        className="
-                        absolute 
+                    className="
+                        relative
+                        h-12
+                        flex
+                        items-center
+                    "
+                >
+                {/* Area interactiva invisible (48px)*/}
+                <div
+                    className="
+                        absolute
                         inset-0
-                       "
-                       onMouseDown={(e) => {
-                        e.preventDef
+                    "
+
+                    onMouseDown={(e) => {
+                        e.preventDefault();
+                        //Mueve el foco al siguiente nodo hermano en el DOM
+                        //nextSibling puede ser texto; si no es elemento valido,
                         e.currentTarget.nextSibling.focus();
-                       }}
-                    />
+                    }}
+                />
 
 
-                    {/* input visual*/}
-                    <input 
-                        id={htmlFor}
-                        type={type}
-                        error={error}
-                        className={`
+                {/* Input visual */}
+                <input
+                    id={htmlFor}
+                    type={type}
+                    className={`
                         relative
                         w-full
                         rounded-md
                         border
                         px-4
                         text-body
+                        
 
                         focus:outline-none
                         focus:ring-2
@@ -102,16 +107,16 @@ export default function Input({
                         focus:ring-brand
                         ${variants[variant]}
                         ${sizes[size]}
-                        ${error ? "border-red-800" : "border border-border"}
-                   `}
-                     {...props} 
-                    />
-                    </div>
-                    {/**Feedback */}
-                    {error && (
-                        <p className="text-caption text-red-800 place-self-start">{error}</p>
-                    )}
 
+                        ${error ? "border-red-800" : "border border-border"}
+                    `}
+                        {...props}
+                    />
             </div>
-    )
-} 
+            {/*Feedback*/}
+            {error && (
+                <p className="text-caption text-red-800 place-self-start">{error}</p>
+            )}
+        </div>
+    );
+}

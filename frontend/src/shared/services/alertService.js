@@ -18,8 +18,9 @@ export function showSuccessAlert({
 
         customClass: {
             popup: "rounded-2x1",
-            title: "text-green-600",  
+            title: "text-lg font-semibold green-600",
             confirmButton: "bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg",
+            timerProgressBar: "bg-green-600 hover:bg-green-700 rounded-lg",
         },
 
         buttonsStyling: false,
@@ -27,30 +28,26 @@ export function showSuccessAlert({
 }
 
 export function showCancelAlert({
-    // Los valores despues del = son valores por defecto
     title = "Cancelado",
     text = "",
     confirmButtonText = "Aceptar",
     timer = 1000,
 }) {
-   // Swal.fire() crea el modal.
-   return Swal.fire({
-    icon: "error",
-    title,
-    text,
-    confirmButtonText,
-    timer,
-    timerProgressBar: true,
-    showConfirmButton: true,
+    return Swal.fire({
+        icon: "error",
+        title,
+        text,
+        confirmButtonText,
+        timer,
+        timerProgressBar: true,
 
-    customClass: {
-      popup: "rounded-2xl",
-      title: "!text-red-600",
-      confirmButton: "bg-red-600 text-white hover:bg-red-700 px-4 py-2 rounded-lg text-text-inverse",
-      timerProgressBar: "!bg-red-600",
-    },
-    buttonsStyling: false,
-  });
+        customClass: {
+            popup: "rounded-2x1",
+            title: "!text-red-600",
+            confirmButton: "bg-red-600 text-white hover:bg-red-700 px-4 py-2 rounded-lg",
+            timerProgressBar: "!bg-red-600 hover:bg-red-700 rounded-lg",
+        },
 
+        buttonsStyling: false,
+    });
 }
-// El signo de ! nos sirve para decirle al sistema que es importante

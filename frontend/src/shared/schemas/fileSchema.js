@@ -1,24 +1,19 @@
-//src/shared/schemas/fileSchema.js
-
+// src/shared/schemas/fileSchema.js
 import { z } from "zod";
 
-const ACCEPTED_TYPES = [
-     "image/jpeg",
-     "image/jpg",
-     "image/png",
-     "image/webp", 
-"application/pdf",
+const ACCEPTED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp",   "application/pdf"
 ];
-const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+
+const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
 
 export const fileSchema = z.object({
     files: z
-     .array(
+        .array(
           z
-             .instanceof(File)
-             .refine((f) => ACCEPTED_TYPES.includes(f.type), "tipo invalido")
-             .refine((f) => f.size <= MAX_SIZE, "Max 10MB"),
-     )
-     .min(1, "Requerido")
-     .max(12, "maximo 12 archivos"),
+            .instanceof(File)
+            .refine((f) => ACCEPTED_TYPES.includes(f.type), "Tipo inválido")
+            .refine((f) => f.size <= MAX_SIZE, "Máx 10MB"),
+        )
+        .min(1, "Requerido")
+        .max(12, "Máx 12 archivos"),
 });

@@ -1,4 +1,4 @@
-// Libreria para generacion de PDFs en el cliente
+﻿// Libreria para generacion de PDFs en el cliente
 import jsPDF from "jspdf";
 
 // Plugin para creacion de tablas dentro del PDF

@@ -1,5 +1,5 @@
-// Esquemas
-export { fileSchema } from "./schemas/fileSchema"
+// Esquemas 
+export { fileSchema } from "./schemas/fileSchema";
 
 // layouts
 export {default as AuthLayout} from "./layouts/AuthLayout";
@@ -10,7 +10,7 @@ export {default as Input} from "./components/Input";
 export {default as Button} from "./components/Button";
 export {default as DeleteCounter} from "./components/DeleteCounter";
 export {default as DeleteCounter2} from "./components/DeleteCounter2";
-export {default as EffectDemo} from "./components/EffectDemo";
+export {default as EffectDemo} from "./components/EffectDemo"; 
 export {default as CounterEffect} from "./components/CounterEffect";
 export {default as Select} from "./components/Select";
 export {default as Checkbox} from "./components/Checkbox";
@@ -24,6 +24,7 @@ export {Dropdown,
         DropdownContent,
 } from "./components/Dropdown";
 export {default as FileInput} from "./components/FileInput";
+export { default as ProtectedRoute } from "./components/auth/ProtectedRoute";
 
 
 // layouts components

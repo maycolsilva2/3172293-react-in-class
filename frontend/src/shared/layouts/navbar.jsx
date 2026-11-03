@@ -1,3 +1,4 @@
+// src/shared/layouts/navbar.jsx
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import {
@@ -8,119 +9,114 @@ import {
   DropdownContent,
   DropdownItem,
 } from "@/shared";
-import  logo  from "@/assets/images/1-logo.png";
-import { Link } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
+import logo from "@/assets/images/1-logo.png";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function Navbar(){
-
-
-  // Componente de búsqueda 😂😂😂
+export default function Navbar() {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
-
 
   const handleSearch = (value) => {
     console.log("Buscar:", value);
   };
 
-
   const handleClear = () => {
     console.log("Campo limpiado");
+  };
+
+  const handleLogout = () => {
+    // Elimina el token guardado en el Login
+    sessionStorage.removeItem("token");
+    // Redirige al inicio de sesión
+    navigate("/auth/login");
   };
 
   return (
     <nav className="w-full bg-transparent border-b-2">
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex h-16 items-center justify-between">
-
-            {/* Logo de marca */}
-          <div className=" hidden sm:block items-center">
-            <Link to={"/dashboard"} className="text-h1 font-heading">
+          {/* Logo de marca */}
+          <div className="hidden sm:block items-center">
+            <Link to="/dashboard/home" className="text-h1 font-heading">
               <img src={logo} alt="logo" className="h-12" />
             </Link>
           </div>
 
-            {/* Links de navegación */}
+          {/* Links de navegación principales */}
           <ul className="hidden md:flex items-center gap-6">
             <li>
-              <Link to={"/auth"} className="hover:text-primary transition">
+              <Link to="/dashboard/home" className="hover:text-primary transition">
                 Inicio
               </Link>
             </li>
             <li>
-              <Link
-                to={"/dashboard"}
-                className="hover:text-primary transition"
-              >
-                Cursos
+              <Link to="/dashboard/userList" className="hover:text-primary transition">
+                Usuarios
               </Link>
             </li>
             <li>
-              <Link to={"/inicio"} className="hover:text-primary transition">
-                Multimedia
+              <Link to="/auth/login" className="hover:text-primary transition">
+                Iniciar Sesión
               </Link>
             </li>
-            <li>
-              <Link to={"/auth/login"} className="hover:text-primary transition">
-                Inicia Sesión
-              </Link>
-            </li>
-            </ul>
+          </ul>
 
-                {/* SearchField + IconButton */}
-            <div>
-              <SearchField
-                value={search}
-                onChange={setSearch}
-                onSubmit={handleSearch}
-                onClear={handleClear}
-                placeholder="Buscar productos..."
-                size="md"
-                variant="outlined"
-                className="w-76"
-              />
-            </div>
+          {/* Campo de búsqueda */}
+          <div>
+            <SearchField
+              value={search}
+              onChange={setSearch}
+              onSubmit={handleSearch}
+              onClear={handleClear}
+              placeholder="Buscar productos..."
+              size="md"
+              variant="outlined"
+              className="w-76"
+            />
+          </div>
 
-        {/* Dropdown */}
-        <div>
-      <Dropdown className="z-15">
-          {/* Disparador */}
-          <DropdownTrigger>
-            <IconButton>
-              <Menu/>
-            </IconButton>
-          </DropdownTrigger>
+          {/* Dropdown de opciones */}
+          <div>
+            <Dropdown className="z-15">
+              <DropdownTrigger>
+                <IconButton>
+                  <Menu />
+                </IconButton>
+              </DropdownTrigger>
 
-          {/* Contenido */}
-        <DropdownContent>
-          <DropdownItem>
-            <Link to="/dashboard/Home" className="block w-full">
-            Gestion de Productos
-            </Link>
-          </DropdownItem>
-          
-          <DropdownItem>
-            <Link to="/dashboard/userCreate" className="block w-full">
-              Crear Usuarios
-            </Link>
-          </DropdownItem>
+              <DropdownContent>
+                <DropdownItem>
+                  <Link to="/dashboard/home" className="block w-full">
+                    Gestión de Productos
+                  </Link>
+                </DropdownItem>
 
-          <DropdownItem>
-            <Link to="/dashboard/userList" className="block w-full">
-              Listar usuarios
-            </Link>
-          </DropdownItem>
-            
-          <DropdownItem>
-            Cerrar Sesión
-          </DropdownItem>
-        </DropdownContent>
+                <DropdownItem>
+                  <Link to="/dashboard/userCreate" className="block w-full">
+                    Crear Usuarios
+                  </Link>
+                </DropdownItem>
 
-      </Dropdown>
-        </div>
+                <DropdownItem>
+                  <Link to="/dashboard/userList" className="block w-full">
+                    Listar Usuarios
+                  </Link>
+                </DropdownItem>
 
+                <DropdownItem>
+                  <Link to="/dashboard/access" className="block w-full">
+                    Admin
+                  </Link>
+                </DropdownItem>
+
+                <DropdownItem onClick={handleLogout} className="text-red-500 cursor-pointer">
+                  Cerrar Sesión
+                </DropdownItem>
+              </DropdownContent>
+            </Dropdown>
+          </div>
         </div>
       </div>
     </nav>
   );
-};
+}

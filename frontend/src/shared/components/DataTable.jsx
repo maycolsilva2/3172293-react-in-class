@@ -8,13 +8,12 @@ import {
 } from "@tanstack/react-table"
 
 
-
 // Hook de React para manejar estado
 import { useState } from "react"
 
 
 // Botón reutilizable del sistema de componentes
-import { Button } from "@/shared"
+import { Button } from "@/shared";
 
 
 // Componente reutilizable de tabla
@@ -80,10 +79,11 @@ export default function DataTable({ data, columns }) {
 
   return (
     <div className="space-y-4">
-        
+
 
       {/* ================== TOOLBAR ================== */}
       {/* Barra superior con buscador y selector de filas */}
+
 
       <div className="flex items-center justify-between gap-4">
 

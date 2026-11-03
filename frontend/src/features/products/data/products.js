@@ -1,3 +1,4 @@
+// src/data/products.js
 import laptop from "@/assets/images/card-laptop.png";
 import monitor from "@/assets/images/card-monitor.png";
 import mouse from "@/assets/images/card-mouse.png";
@@ -10,7 +11,7 @@ export const products = [
     price: 3500000,
     description: "Laptop de alto rendimiento para desarrollo y diseño.",
     image: laptop,
-    category: "perifericos"
+    category: "perifericos",
   },
   {
     id: 2,
@@ -18,7 +19,7 @@ export const products = [
     price: 1200000,
     description: "Monitor IPS ideal para programación y edición.",
     image: monitor,
-    category: "perifericos"
+    category: "perifericos",
   },
   {
     id: 3,
@@ -26,7 +27,7 @@ export const products = [
     price: 80000,
     description: "Mouse ergonómico, la mejor calidad y precio.",
     image: mouse,
-    category: "perifericos"
+    category: "perifericos",
   },
   {
     id: 4,
@@ -34,6 +35,6 @@ export const products = [
     price: 50000,
     description: "Teclado mecánico con iluminación RGB.",
     image: teclado,
-    category: "perifericos"
-  }
+    category: "perifericos",
+  },
 ];

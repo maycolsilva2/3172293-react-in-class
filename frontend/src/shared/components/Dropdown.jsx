@@ -7,7 +7,7 @@ import {
   cloneElement
 } from "react"
 
-export const DropdownContext = createContext(null)
+export const DropdownContext = createContext(null) //EL PAPÁ
 
 export function Dropdown({
   children,
@@ -15,18 +15,23 @@ export function Dropdown({
   onOpenChange,
   className = ""
 }) {
-  const [uncontrolledOpen, setUncontrolledOpen] = useState(false)
 
-  const isControlled = controlledOpen !== undefined
-  const open = isControlled ? controlledOpen : uncontrolledOpen
+    //NO CONTROLADO - El dropdown maneja su propio estado de abierto/cerra
+    //MODO CONTROLADO - Tú decides desde afuera si está abierto o cerrado
+    const [uncontrolledOpen, setUncontrolledOpen] = useState(false)
+    const isControlled = controlledOpen !== undefined
+    const open = isControlled ? controlledOpen : uncontrolledOpen
 
-  const setOpen = (value) => {
+    // Si no se pone el onchange en el controlado se queda ahi. nunca cambia porq ue nadie escucha el evento 
+ const setOpen = (value) => {
     if (isControlled) {
-      onOpenChange?.(value)
+      onOpenChange?.(value)  // Le avisa al papa
     } else {
-      setUncontrolledOpen(value)
+      setUncontrolledOpen(value) // Lo cambia el mismo
     }
   }
+
+  
 
   const containerRef = useRef(null)
 
@@ -38,11 +43,13 @@ export function Dropdown({
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside) //mousedown escucha todos los clicks
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
-  // Escape key
+
+
+  // Escape key, esto es accesibilidad todos los dropdowns se cierran con Esc
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === "Escape") setOpen(false)
@@ -51,6 +58,7 @@ export function Dropdown({
     document.addEventListener("keydown", handleEscape)
     return () => document.removeEventListener("keydown", handleEscape)
   }, [])
+
 
   return (
     <DropdownContext.Provider value={{ open, setOpen }}>
@@ -67,21 +75,24 @@ export function DropdownTrigger({ children }) {
 
   if (!children) return null
 
+
   return cloneElement(children, {
     onClick: (e) => {
       children.props.onClick?.(e)
       setOpen(!open)
     },
-    "aria-expanded": open,
+    "aria-expanded": open, // Accesibilidad le dice este boton tiene un menú y ahora esta abierto/cerrado.
     "aria-haspopup": "menu"
   })
 }
 
 // Content
+// Esto aparece cuando le das clic
 export function DropdownContent({ children, className = "" }) {
   const { open } = useContext(DropdownContext)
 
-  if (!open) return null
+
+  if (!open) return null //Si está cerrado, ni renderiza el menú
 
   return (
     <div
@@ -118,7 +129,7 @@ export function DropdownItem({
 
   const handleClick = (e) => {
     onClick?.(e)
-    setOpen(false)
+    setOpen(false) // Se cierra solo al darle click
   }
 
   return (

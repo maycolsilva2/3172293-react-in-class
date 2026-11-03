@@ -1,4 +1,4 @@
-// Fuente de datos de usuarios (mock o fuente centralizada)
+﻿// Fuente de datos de usuarios (mock o fuente centralizada)
 import { users } from "../../data/users";
 
 // Utilidad para transformar datos en dataset de reporte
@@ -30,7 +30,7 @@ export function generateUserReport({
     return;
   }
 
-  // Generacion de timestamp para nombres unicos de archivo (YYYY-MM-DD)
+  // Generacion de timestamp para nombres unicos de archivo
   const timestamp = new Date().toISOString().slice(0, 10);
 
   // Seleccion de estrategia de exportacion segun formato

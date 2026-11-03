@@ -1,62 +1,42 @@
-// componente select 
+﻿// Componente Select reutilizable
+export default function Select({
+  label,
+  name,
+  value,
+  error,
+  onChange,
+  options = [],
+  htmlFor,
+}) {
+  return (
+    <div className="w-[320px]">
+      {label && (
+        <label htmlFor={htmlFor} className="block text-caption mb-1 text-text-muted">
+          {label}
+        </label>
+      )}
 
-export default function select ({
-    label,
-    error,
-    htmlFor,
-    name,
-    onChange,
-    value,
-    options = [],
-}){
-    return(
-        <div>
-            {/**label solo se muestra si es truthy en uno logico */}
-            {label && (
-                <label 
-                    htmlFor ={htmlFor}
-                    className="
-                    block
-                    text-caption
-                    text-secondary
-                    "
-                >
-                    {label}
-                </label>
-            )}
-            {/**select */}
-            <select
-                name={name}
-                onChange={onChange}
-                value={value}
-                id={htmlFor}
-                className="
-                    w-80
-                    h-12
-                    rounded-md
-                    border
-                    px-4
+      <select
+        id={htmlFor}
+        value={value}
+        onChange={onChange}
+        name={name}
+        className="w-full h-12 rounded-md border border-border px-4"
+      >
+        <option value="">Seleccione una opcion</option>
 
-                    hover:border
-                    border:border-2
-                    hover:border-focus-border
-                    
-                "
-            >
-                <option value=""> selecione una opción</option>
+        {options.map((option) => {
+          const optionValue = option.value ?? option.id;
 
-                {options.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                    </option>
-                    ))}
+          return (
+            <option key={optionValue} value={optionValue}>
+              {option.label}
+            </option>
+          );
+        })}
+      </select>
 
-
-            </select>
-             {error && (
-                        <p className="text-caption text-red-800 place-self-start mt-1">{error}</p>
-                )}
-
-        </div>
-    )
+      {error && <p className="text-caption text-red-600 mt-1">{error}</p>}
+    </div>
+  );
 }

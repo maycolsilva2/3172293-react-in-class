@@ -1,9 +1,13 @@
 // src/features/auth/components/Login.jsx
 import { useState } from "react";
 import { loginSchema } from "../schemas/loginSchema";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { login } from "../services/authService";
-import { Input, Button } from "@/shared";
+import { Input, Button } from "@/shared"; 
+
+import { showSuccessAlert, showCancelAlert } from "@/shared/services/alertService";
+
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -44,9 +48,25 @@ export default function Login() {
       console.log("LOGIN RESPONSE:", data);
 
       sessionStorage.setItem("token", data.token);
-      navigate("/dashboard/userList");
+
+      // Metemos un sweetaler dentro del try que avisara que se pudo iniciar sesion correctamente 
+      await showSuccessAlert({
+        title: "Inicio de sesión exitoso",
+        text: "Bienvenido al sistema",
+        timer: 1500,
+      });
+
+      navigate("/dashboard/home");
+
     } catch (error) {
-      alert(error.message);
+      console.error("Error en login:", error.message);
+
+      // lo mismo hacemos en el cath por si llega a fallar y no encuentra el usuario o la contraseña es incorrecta
+      await showCancelAlert({
+        title: "Error al iniciar sesión",
+        text: "Credenciales incorrectas",
+        timer: 2000,
+      });
     }
   };
 
@@ -81,10 +101,16 @@ export default function Login() {
             error={errors.userPassword}
           />
 
-          <div className="flex items-end justify-end gap-4">
-            <Button variant="secondary" size="sm" type="button">
-              Cancelar
-            </Button>
+          <div className="text-center text-sm my-2">
+            <Link
+              to="/auth/register"
+              className="text-primary font-bold hover:underline"
+            >
+              No tienes cuenta? Regístrate aquí
+            </Link>
+          </div>
+
+          <div className="flex justify-center gap-4">
 
             <Button variant="primary" size="md" type="submit">
               Ingresar

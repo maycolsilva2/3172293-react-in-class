@@ -1,35 +1,42 @@
 // src/app/router.jsx
-import { createBrowserRouter, Navigate } from "react-router-dom";   
-import { AuthLayout, DashboardLayout } from "@/shared";
-import { UserListPage, UserRegisterForm } from "@/features/users";
-import HomePage from "@/features/home/pages/HomePage";
+import { createBrowserRouter, Navigate } from "react-router-dom";
+import { AuthLayout, DashboardLayout, ProtectedRoute } from "@/shared";
 import { Login } from "@/features/auth";
+import { UserListPage, UserRegisterForm } from "@/features/users";
+import { AccessPage } from "@/features/access";
+import HomePage from "@/features/home/page/HomePage";
 
-const  router = createBrowserRouter([
+const router = createBrowserRouter([
     {
-
         path: "/",
-        element: <Navigate to="/dashboard" replace/>
+        element: <Navigate to="/auth/login" replace />,
     },
     {
         path: "/auth",
-        element: <AuthLayout/>,
-        children:[
-            {
-                path: "login",
-                element: <Login/>,  
-            },
+        element: <AuthLayout />,
+        children: [
+        {
+            path: "login",
+            element: <Login />,
+        },
+        {
+            path: "register",
+            element: <UserRegisterForm />,
+        },
         ],
     },
     {
         path: "/dashboard",
-        element : <DashboardLayout/>,
+        element: (
+        <ProtectedRoute>
+            <DashboardLayout />
+        </ProtectedRoute>
+        ),
         children: [
-            {index: true},
-            // { path: "/dashboard/auth", element: <h1>Hello2</h1>},
-            { path: "userList", element: <UserListPage />},
-            { path: "userCreate", element: <UserRegisterForm />},
-            { path: "Home", element: <HomePage />},
+        { path: "userList", element: <UserListPage /> },
+        { path: "userCreate", element: <UserRegisterForm /> },
+        { path: "home", element: <HomePage /> },
+        { path: "access", element: <AccessPage /> },
         ],
     },
 ]);

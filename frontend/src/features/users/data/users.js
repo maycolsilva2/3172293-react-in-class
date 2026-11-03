@@ -1,15 +1,15 @@
-// Nombre, Correo, Telefono, tipos de documento, numero de documento
+﻿// Nombre, Correo, Telefono, tipos de documento, numero de documento
 
 // src/data/users.js
 
 export const users = [
     {
         id: 1,
-        userName: "Maycol silva",
-        userEmail: "maykolestibensilva@gmail.com",
-        userPhone: "3147801819",
+        userName: "Fabian Guzman",
+        userEmail: "fabianguzman206@gmail.com",
+        userPhone: "3001234567",
         userDocumentTypes: "CC",
-        userDocumentNumber: "1030140334",
+        userDocumentNumber: "3001234567",
         isActive: true
     },
     {

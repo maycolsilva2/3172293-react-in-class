@@ -1,4 +1,4 @@
-// src/users/pagesUserListPage.js
+﻿// src/users/pagesUserListPage.js
 
 import { useState } from "react";
 import { DataTable, Button } from "@/shared";
@@ -15,7 +15,7 @@ export default function UserListPage() {
       <h1 className="text-x1 font-semibold mb-4">Listado de Usuarios</h1>
 
       <div className="flex justify-end items-center gap-4">
-        <Button type="button" onClick={() => setIsReportModalOpen(true)}>
+        <Button onClick={() => setIsReportModalOpen(true)}>
           Reportar usuario
         </Button>
 

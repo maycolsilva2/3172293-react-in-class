@@ -1,4 +1,4 @@
-// Libreria para manipulacion y generacion de archivos Excel
+﻿// Libreria para manipulacion y generacion de archivos Excel
 import * as XLSX from "xlsx";
 
 // Funcion utilitaria para generar un archivo Excel a partir de datos tabulares

@@ -1,4 +1,4 @@
-// Hook para manejo de estado local en componentes funcionales
+﻿// Hook para manejo de estado local en componentes funcionales
 import { useState } from "react";
 
 // Configuracion de campos disponibles para el reporte

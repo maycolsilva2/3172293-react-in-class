@@ -1,4 +1,4 @@
-// Funcion utilitaria para construir el dataset de un reporte (tabla)
+﻿// Funcion utilitaria para construir el dataset de un reporte (tabla)
 // Patron: transformacion de datos (input -> output listo para exportar)
 export function buildReportDataset({
   users, // Array de usuarios origen
@@ -26,6 +26,7 @@ export function buildReportDataset({
     selectedFields.map((field) => {
       const value = user[field.key]; // Acceso dinamico a la propiedad
 
+      //ADICION NUEVA PARA EVITAR QUE APAREZCA TRUE O FALSE, AHORA APARECE SI OH NO 
       // Normalizacion: convierte booleanos a texto legible
       if (typeof value === "boolean") {
         return value ? "Si" : "No";
@@ -36,7 +37,6 @@ export function buildReportDataset({
     }),
   );
 
-  // Estructura final desacoplada de la UI
   // Lista para exportar a Excel, PDF o renderizar en tabla
   return {
     headers, // Array de strings (columnas)

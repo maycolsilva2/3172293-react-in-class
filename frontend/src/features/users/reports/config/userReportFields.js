@@ -1,4 +1,4 @@
-// Configuracion de campos disponibles para el reporte de usuarios
+﻿// Configuracion de campos disponibles para el reporte de usuarios
 // Cada objeto representa una columna que el usuario puede incluir o excluir
 export const userReportFields = [
   {

@@ -1,25 +1,44 @@
 // UserRegisterForm componente para registrar un usuario
 
 import { useState, useEffect } from "react";
-import { Input, Select, Checkbox, Button, FileInput } from "@/shared";
+import {    Input, 
+            Button, 
+            // DeleteCounter2,
+            Select, 
+            Checkbox, 
+            // IconButton,
+            // Dropdown,
+            // DropdownTrigger,
+            // DropdownItem,
+            // DropdownContent,
+            FileInput
+    } from "@/shared";
 import { getDocumentTypes } from "@/services/selectService";
 import { useNavigate} from "react-router-dom";
 import {userSchema} from "../schemas/userSchema";
 import { User, Calendar } from "lucide-react";
 import { showSuccessAlert, showCancelAlert } from "@/shared/services/alertService";
+
 import { createUser } from "../services/userServices";
+
+
+
+
+
+
+
 
 
 export default function UserRegisterForm (){
 
-        // Estado
+        // Estado 
         const [isSubmitting, setIsSubmitting] = useState(false);
 
         //Navegacion
         const navigate = useNavigate();
 
         //Estado del error
-         const [errors, setErrors] = useState({})
+        const [errors, setErrors] = useState({})
 
         // Estado del formulario 
         const [FormData, setFormData] =  useState({
@@ -36,6 +55,7 @@ export default function UserRegisterForm (){
             isActive: true,
             isSuperUser: false,
         });
+
 
         //Estado para los tipos de documento
         const [documentTypes, setDocumentTypes] = useState([]);
@@ -100,55 +120,53 @@ export default function UserRegisterForm (){
         // Si la validacion pasa, limpiamos errores previos
         setErrors({});
 
-        //Activamos eestado de envio (util para desahibilitar el boton)   
-        setIsSubmitting(true);
+        //Activamos eestado de envio (util para desahibilitar el boton)
+        // setIsSubmitting(true);
 
         try {
             //llamamos al servivio frontend que soncume la API 
             //result.data contiene los datos ya validamos por Zod
-            const responde = await createUser(result.data);
+            const response = await createUser(result.data);
+            //  linea comentada es un servicio 
 
             //Log informativo para desarrolllo
-            console.log("Usuario Creado:", responde);
-        //Feedback basico al usuario 
+            console.log("Usuario creado:", response);
+        //   igual
+
             await showSuccessAlert({
                 title: "Usuario creado",
-                text: "El usuario se ha creado correctamente",
+                text: "El usuario fue creado correctamente",
                 timer: 3000,
-        });
+            });
 
-            
-            
             //Navegamos a la vista anterior
             // navigate (-1) equivale a "volver atras"
-            navigate(-1);
+        
+            navigate("/auth/login");
 
         } catch (error){
             //Caoturamos errores de red o errores lanzados por el service
             console.error("Error:" , error.message);
-            
+
             //Mstramos el mensaje de error al usuario 
             alert(error.message);
         } finally {
             //Pase lo que pase, desactivamos el esrado de envio 
             setIsSubmitting(false);
         }
-        
-        
     };
-    const handleCancel = async () => {
-        // Desplegamos la alerta de confirmación
-        const result = await showCancelAlert({
-            title: "Cancelado",
-            text: "Los cambios no guardados se perderán.",
-            timer: 3000,
+
+const handleCancel = async () => {
+    const result = await showCancelAlert({
+                title: "Cancelado",
+                text: "El usuario no fue creado",
+                timer: 3000,
         });
-    
+
         if (result.isConfirmed) {
-            // Navegamos a la vista anterior
             navigate(-1);
         }
-    };
+};
 
     //========================================
     //          Handle NameChange
@@ -257,25 +275,30 @@ return(
                     onChange={handleChange}
                 />
 
+                <div>
+                    <h2>Cantidad maxima de archivos: 12</h2>
+                    <h3>Peso maximo: 10MB</h3>
+                </div>
+
+
+                <FileInput 
+                    value={FormData.userImage}
+                    onChange={(files) => 
+                    setFormData((prev) => ({ ...prev, userImage: files }))
+                    }
+                    multiple={true}
+                />
+                {errors.userImage && (
+                    <span className="text-red-500 text-sm">{errors.userImage}</span>
+            )}
+
+            
+
             </div>
 
-            <div>
-                        <p>archivo minio 1 y maximos 12 para su registro</p>
-                        <p>peso maximo 10MB</p>
-    
-            </div>
-    
-            <FileInput 
-                     value={FormData.userImage}
-                        onChange={(files) => 
-                         setFormData((prev) => ({ ...prev, userImage: files }))
-                     }
-                     multiple={true}
-            />
-                    {errors.userImage && (
-                    <span className="text-red-500 text-sm">{errors.userImage}</span>
-                    )}
             
+            
+
 
             {/* Actions */}
                 <div className="flex gap-6 items-center">
@@ -297,23 +320,25 @@ return(
                      Guardar
                     </Button> */}
                     <Button
+                        
                         variant="primary"
                         size="md"
                         type="submit"
                         disabled={isSubmitting}
-                    >
-                        {isSubmitting ? "guardando... " : "guardar"}
+                    > 
+                        {isSubmitting ? "Guardando..." : "Guardar"}
                     </Button>
                   
                 </div>
-
-                            
+                
                 {/* IconButton de ejemplo */}
                 <User/>
                 <Calendar/>
+                  
           </form>
         </div>
     );
 }
+
 
 

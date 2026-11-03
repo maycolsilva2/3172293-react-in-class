@@ -2,68 +2,71 @@ import { useNavigate } from "react-router-dom";
 
 const navigate = useNavigate();
 
-import {createUser} from "../services/userServices";
+import { createUser } from "../services/userServices";
 
-const [isSubmitting, setIssubmitting] = useState(false);
+const [ isSubmitting, setIsSubmitting] = useState(false);
 
-// ======================================HANDLE SUBMIT=======================
+//================================ HANDLE SUBMIT ========================
 const handleSubmit = async (e) => {
+    // Evita que el formulario recargue la página
     e.preventDefault();
 
-    // Validamos los datos del formulario contra el esquema zod
-    // safeParse NO lanza excepción, retorna un objeto controlao
+    // Validamos los datos del formulario contra el esquema Zod
+    // safeParse NO lanza excepción, retorna un objeto controlado 
     const result = userSchema.safeParse(formData);
 
-    // verificar en consola si el esquema esta funcionando correctamente
+    // Verificar en consola si el esquema está funcionando correctamente
     console.log(result);
 
-    // si la  validación falla
-    if (!result.succes) {
-        // objeto donde almacenaremos los  errores por campo
+    // Si la validación falla
+    if (!result.sucess) {
+        // Objeto donde almacenaremos los errores por campo
         const fieldErrors = {};
 
-        // Recorremos cada error generado por zod
+        // Recorremos cada error generado por Zod
         result.error.issues.forEach((issue) => {
             // issue.path[0] corresponde al nombre del campo
-            // issue.message contiene el mensaje del error definido en el Schema
-            fieldErrors[issue.path[0]] = issue.message
+            // issue.message contiene el mensaje de error definido en el schema 
 
-        })
+            fieldErrors[issue.path[0]] = issue.message;
+        });
 
-        // Actualizamos el estado de errores para mostrarlos en la UI
+        //  Actualizamos el estado de errores para mostrarlos en la UI
         setErrors(fieldErrors);
-        // cortamos la ejecución no se envia nada al backend
+
+        // Cortamos la ejecución: NO se envía nada al backend
 
         return;
-    
     }
-    // si la validación pasa, limpiamos erroes previos
+
+    // Si la validación pasa, limpiamos errores previos
     setErrors({});
 
-// Activamos estado de envio (util para deshabilitar el botón)
-    setIssubmitting(true);
-    try{
-        // Llamamos el servicio de frontend que consume la API
-        // Result.data contiene los datos ya validados por Zod
-        const response = await createUser(result.data);
+    // Activamos estado de envío (útil para deshabilitar el botón)
+    setIsSubmitting(true);
 
-        // log informativo para desarrollo
-        console.log("usuarios creado:", response);
+    try {
+        // Llamamos al servicio frontend que consume la API 
+        // result.data contiene los datos ya validados por Zod
+        const responde = await createUser(result.data);
 
-        // feedback basico del usuario
-        alert("usuario creado correctamente");
+        // Log informativo para desarrollo
+        console.log("Usuario creado:", responde);
 
-        // navegamos a la vista anterior
+        // Feedback básico al usuario
+        alert("Usuario creado correctamente");
+
+        // Navegamos a la vista anterior
+        // navigate(-1) equivale a "volver atrás"
         navigate(-1);
-    }catch (error){
-        // capturamos errores de red o errores lanzados por service
-        console.error("error:", error.message);
+    } catch (error) {
+        // Capturamos errores de red o errores lanzados por el service
+        console.error("Error:", error.message);
 
-        // mostramos el  mensaje de error al usuario
-        alert(error.message);
-
+        // Mostramos el mensaje de error al usuario
+        alert(error.message);               
     } finally {
-        // pase lo que pase, desactivamos el estado envio
-        setIssubmitting(false)
+        // Pase lo que pase, desactivamos el estado de envío
+        setIsSubmitting(false);
     }
 };

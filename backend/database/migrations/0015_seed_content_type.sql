@@ -1,0 +1,10 @@
+-- database/migrations/seed_content_type.sql
+INSERT INTO content_type (
+    app_label,
+    model
+)
+VALUES
+    ('users', 'user'),
+    ('groups', 'group'),
+    ('tasks', 'task'),
+    ('access', 'permission');
